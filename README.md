@@ -64,3 +64,21 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+## Documents
+1. (Relitive stability) to or pugged ->$1.00
+    1. chainlink price Feed
+    2. set the function to exchange ETH & BTC -> $$$
+
+2. stability Mechanisum (Minting):Algorithmic(Decenterlized)
+    1. People can only mint stablecoin with enough collectral
+(coded)
+3. Collecteral: Exogenious(crypto)
+    1. ETH
+    2. BTC
+    - calculate health factor function 
+    - set health factor if debt is 0
+    - Added a bunch of view function
+
+    1. What are our invarient/properties ?
+
+done 16 leacture revision
