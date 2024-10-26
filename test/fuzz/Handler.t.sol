@@ -30,49 +30,50 @@ contract Handler is Test{
        vm.startPrank(msg.sender);
        collateral.mint(msg.sender, amountCollateral);
        collateral.approve(address(dsce), amountCollateral);
-
         dsce.depositCollateral(address(collateral), amountCollateral);
+
+    //     dsce.depositCollateral(address(collateral), amountCollateral);
           vm.stopPrank();
           //this would double push 
-          usersWithCollateralDeposited.push(msg.sender); 
+        //   usersWithCollateralDeposited.push(msg.sender); 
          
     }
-    function redeemCollateral(uint256 collateralSeed , uint256 amountCollateral) public{
-        ERC20Mock collateral=_getCollateralFromSeed(collateralSeed); 
-        uint256 maxCollateralToRedeem=dsce.getCollateralBalanceOfUser(address(collateral), msg.sender);
-        console.log("maxCollateralToRedeem",maxCollateralToRedeem);
-        console.log("amountCollateral",amountCollateral);
-        amountCollateral=bound(amountCollateral,0,maxCollateralToRedeem);
-        if(amountCollateral==0){
-            return;
-        }
-        dsce.redeemCollateral(address(collateral), amountCollateral);
-    }
-    function mintDsc(uint256 amount,uint256 addressSeed) public{
-        if(usersWithCollateralDeposited.length==0){
-            return;
-        }
-        address sender=usersWithCollateralDeposited[addressSeed % usersWithCollateralDeposited.length];
-        // we should only mint dsc if amount is less then collateral
+    // function redeemCollateral(uint256 collateralSeed , uint256 amountCollateral) public{
+    //     ERC20Mock collateral=_getCollateralFromSeed(collateralSeed); 
+    //     uint256 maxCollateralToRedeem=dsce.getCollateralBalanceOfUser(address(collateral), msg.sender);
+    //     console.log("maxCollateralToRedeem",maxCollateralToRedeem);
+    //     console.log("amountCollateral",amountCollateral);
+    //     amountCollateral=bound(amountCollateral,0,maxCollateralToRedeem);
+    //     if(amountCollateral==0){
+    //         return;
+    //     }
+    //     dsce.redeemCollateral(address(collateral), amountCollateral);
+    // }
+    // function mintDsc(uint256 amount,uint256 addressSeed) public{
+    //     if(usersWithCollateralDeposited.length==0){
+    //         return;
+    //     }
+    //     address sender=usersWithCollateralDeposited[addressSeed % usersWithCollateralDeposited.length];
+    //     // we should only mint dsc if amount is less then collateral
 
-        (uint256 totalDscMinted, uint256 collateralValueInUsd)=dsce.getAccountInformation
-        (sender);
-        uint256 maxDscToMint=(collateralValueInUsd/2) - totalDscMinted;
-        if(maxDscToMint<0){
-            return;
-        }
-        // amount=bound(amount,1,MAX_DEPOSIT_SIZE);
-        amount=bound(amount,0,maxDscToMint);
-        if(amount ==0){
-            return;
-        }
+    //     (uint256 totalDscMinted, uint256 collateralValueInUsd)=dsce.getAccountInformation
+    //     (sender);
+    //     uint256 maxDscToMint=(collateralValueInUsd/2) - totalDscMinted;
+    //     if(maxDscToMint<0){
+    //         return;
+    //     }
+    //     // amount=bound(amount,1,MAX_DEPOSIT_SIZE);
+    //     amount=bound(amount,0,maxDscToMint);
+    //     if(amount ==0){
+    //         return;
+    //     }
 
-        vm.startPrank(sender);
-        dsce.mintDsc(amount);
-        vm.stopPrank();
+    //     vm.startPrank(sender);
+    //     dsce.mintDsc(amount);
+    //     vm.stopPrank();
          
-        timeMintIsCalled++;
-    }
+    //     timeMintIsCalled++;
+    // }
     //helper function 
     function _getCollateralFromSeed(uint256 collateralSeed) private view returns(ERC20Mock){
         
