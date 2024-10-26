@@ -2,7 +2,7 @@
 
 // // Invariants:
 // // The total supply od DSC should less than the total supply of the collateral
-// // Getter view function should never rever<- evergreen invarient 
+// // Getter view function should never rever<- evergreen invarient
 // // protocol must never be insolvent / undercollateralized
 
 // // users cant create stablecoins with a bad health factor
@@ -27,12 +27,12 @@
 //     HelperConfig config;
 //     address weth;
 //     address wbtc;
-    
+
 //     function setUp() external {
 //         deployer = new DeployDSC();
 //         (dsc, dsce, config) = deployer.run();
 //         (,,weth,wbtc,)=config.activeNetworkConfig();
-        
+
 //         targetContract(address(dsce));
 
 //     }
@@ -45,7 +45,7 @@
 
 //          uint256 wethValue=dsce.getUsdValue(weth, totalWethDeposited);
 //         uint256 wbtcValue=dsce.getUsdValue(wbtc, totalWbtcDeposited);
-       
+
 //           assert(wethValue+wbtcValue>=totalSupply);
 //       }
 // }
