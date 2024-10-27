@@ -140,8 +140,8 @@ contract DSCEngine is ReentrancyGuard {
 
     function depositCollateral(address tokenCollateralAddress, uint256 amountCollateral)
         public
-        moreThanZero(amountCollateral)
         isAllowedToken(tokenCollateralAddress)
+        moreThanZero(amountCollateral)
         nonReentrant
     {
         s_collateralDeposited[msg.sender][tokenCollateralAddress] += amountCollateral;
@@ -402,5 +402,17 @@ contract DSCEngine is ReentrancyGuard {
 
     function getCollateralTokens() external view returns (address[] memory) {
         return s_collateralTokens;
+    }
+
+    function getLiquidationBonus() external pure returns (uint256) {
+        return LIQUIDATION_BONUS;
+    }
+
+    function getMinHealthFactor() external pure returns (uint256) {
+        return MIN_HEALTH_FACTOR;
+    }
+
+    function getDsc() external view returns (address) {
+        return address(_i_dsc);
     }
 }

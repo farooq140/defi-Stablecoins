@@ -16,8 +16,8 @@ contract Handler is Test {
     DecentralizedStableCoin dsc;
     ERC20Mock weth;
     ERC20Mock wbtc;
-    uint256 MAX_DEPOSIT_SIZE = type(uint96).max;
     uint256 public timeMintIsCalled;
+    uint256 MAX_DEPOSIT_SIZE = type(uint96).max;
     address[] public usersWithCollateralDeposited;
 
     constructor(DSCEngine _dscEngine, DecentralizedStableCoin _dsc) {
@@ -37,12 +37,17 @@ contract Handler is Test {
         collateral.approve(address(dsce), amountCollateral);
         dsce.depositCollateral(address(collateral), amountCollateral);
         vm.stopPrank();
+        usersWithCollateralDeposited.push(msg.sender);
         //this would double push
     }
 
-    function mintDsc(uint256 amount) public {
+    function mintDsc(uint256 amount, uint256 addressSaeed) public {
+        if (usersWithCollateralDeposited.length == 0) {
+            return;
+        }
+        address sender = usersWithCollateralDeposited[addressSaeed % usersWithCollateralDeposited.length];
         amount = bound(amount, 1, MAX_DEPOSIT_SIZE);
-        (uint256 totalDscMinted, uint256 collateralValueInUsd) = dsce.getAccountInformation(msg.sender);
+        (uint256 totalDscMinted, uint256 collateralValueInUsd) = dsce.getAccountInformation(sender);
         uint256 maxDscToMint = collateralValueInUsd / 2 - totalDscMinted;
         if (maxDscToMint < 0) {
             return;
@@ -51,10 +56,11 @@ contract Handler is Test {
         if (amount == 0) {
             return;
         }
-        vm.startPrank(msg.sender);
+        vm.startPrank(sender);
 
         dsce.mintDsc(amount);
         vm.stopPrank();
+        timeMintIsCalled++;
     }
 
     function redeemCollateral(uint256 collateralSeed, uint256 amountCollateral) public {
@@ -73,5 +79,19 @@ contract Handler is Test {
             return weth;
         }
         return wbtc;
+    }
+
+    function invariant_gettersCantRevert() public view {
+        dsce.getAdditionalFeedPrecision();
+        dsce.getCollateralTokens();
+        dsce.getLiquidationBonus();
+        dsce.getLiquidationThreshold();
+        dsce.getMinHealthFactor();
+        dsce.getPrecision();
+        dsce.getDsc();
+        // dsce.getTokenAmountFromUsd();
+        // dsce.getCollateralTokenPriceFeed();
+        // dsce.getCollateralBalanceOfUser();
+        // getAccountCollateralValue();
     }
 }
